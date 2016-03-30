@@ -18,7 +18,7 @@ else { die "Usage: $0 <base-revision>\n"; }
 
 # Make sure the index is empty.
 open my $fh, 'git status --porcelain |' or die "git status: $!\n";
-grep m[^\w], <$fh> and die "You have staged changes. Unstage or commit them, and try again.\n";
+grep m[^\w], <$fh> and die "You have staged changes. Unstage, stash, or commit them, and try again.\n";
 close $fh or die "git status returned non-zero\n";
 
 # Enumerate all the candidate target SHAs.
