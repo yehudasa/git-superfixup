@@ -179,7 +179,7 @@ sub shrinkws
     my ($str) = @_;
     $str =~ s[^\s+][];
     $str =~ s[\s+$][];
-    $str =~ s[\s+][ ];
+    $str =~ s[\s+][ ]g;
     return $str;
 }
 
