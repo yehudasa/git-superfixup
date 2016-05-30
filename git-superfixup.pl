@@ -40,7 +40,7 @@ for my $rev (@revs)
 {
     $msgs{$rev} =~ m[^(?:fixup|squash)! (.*)$] or next;
     my $msg = $1;
-    my ($sha) = grep { $msgs{$_} =~ m[^$msg] } @revs;
+    my ($sha) = grep { $msgs{shrinkws($_)} =~ m[^$msg] } @revs;
     defined $sha and $aliases{$rev} = $sha;
 }
 
@@ -172,6 +172,16 @@ for my $file (sort keys %fails)
 exit(%fixups ? 0 : 1);
 
 ### Subroutines ################################################################
+
+# Replace consecutive whitespace characters with a single space.
+sub shrinkws
+{
+    my ($str) = @_;
+    $str =~ s[^\s+][];
+    $str =~ s[\s+$][];
+    $str =~ s[\s+][ ];
+    return $str;
+}
 
 # Invoke git blame to identify the origin of a specific line in a file.
 sub blame
