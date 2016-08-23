@@ -38,10 +38,12 @@ close $fh or die "git log returned non-zero\n";
 my %aliases;
 for my $rev (@revs)
 {
-    $msgs{$rev} =~ m[^(?:fixup|squash)! (.*)$] or next;
-    my $msg = $1;
-    my ($sha) = grep { $msgs{shrinkws($_)} =~ m[^$msg] } @revs;
+    $msgs{$rev} =~ m[^(fixup|squash)! (.*)$] or next;
+    my $kind = $1;
+    my $msg = shrinkws($2);
+    my ($sha) = grep { substr(shrinkws($msgs{$_}), 0, length $msg) eq $msg } @revs;
     defined $sha and $aliases{$rev} = $sha;
+    defined $sha or warn "WARNING: $rev looks like a $kind with no corresponding target: $msg\n\n";
 }
 
 # Read all changes in the working tree.
