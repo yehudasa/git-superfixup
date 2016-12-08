@@ -21,6 +21,11 @@ open my $fh, 'git status --porcelain |' or die "git status: $!\n";
 grep m[^\w], <$fh> and die "You have staged changes. Unstage, stash, or commit them, and try again.\n";
 close $fh or die "git status returned non-zero\n";
 
+# Make sure submodules are up-to-date.
+open $fh, 'git submodule summary |' or die "git submodule: $!\n";
+grep m[^\S], <$fh> and die "Can not proceed with submodules out of sync.\n";
+close $fh or die "git submodule returned non-zero\n";
+
 # Enumerate all the candidate target SHAs.
 open $fh, "git log --pretty=oneline '$base..HEAD' |" or die "git log: $!\n";
 my(@revs, %msgs);
