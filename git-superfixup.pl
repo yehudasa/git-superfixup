@@ -52,7 +52,7 @@ for my $rev (@revs)
 }
 
 # Read all changes in the working tree.
-open $fh, 'git diff |' or die "git diff: $!\n";
+open $fh, 'git diff --ignore-submodules |' or die "git diff: $!\n";
 my @lines = <$fh>;
 close $fh or die "git diff returned non-zero\n";
 @lines or die "Nothing to do.\n";
